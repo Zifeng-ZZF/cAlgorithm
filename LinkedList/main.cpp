@@ -100,6 +100,14 @@ struct Node* reverse2(struct Node *headPtr)
     return previ;   
 }
 
+/*
+
+*/
+struct Node* sort(struct Node *headPrt)
+{
+
+    return NULL;
+}
 
 int main()
 {
