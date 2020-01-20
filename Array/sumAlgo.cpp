@@ -22,7 +22,7 @@ std::vector<int> twoSum (std::vector<int>& nums, int length, int target)
 
 
 /*
-    find all the combinations of three numbers such that their sum is zero
+Find all the combinations of three numbers such that their sum is zero
 */
 std::vector<std::vector<int>> threeSum (std::vector<int>& nums, int length)
 {
@@ -65,10 +65,59 @@ std::vector<std::vector<int>> threeSum (std::vector<int>& nums, int length)
     return ans;
 }
 
-
-std::vector<int> threeSumCloset (std::vector<int>& nums, int length, int target)
+/*
+Given a set of numbers and a target sum. Find three numbers from the set such that
+their sum is closest to the target number. Return the sum of these three numbers.
+*/
+int threeSumCloset (std::vector<int>& nums, int length, int target)
 {
-    std::vector<int> ans;
+    if (length <= 2)
+    {
+        return 0;
+    }
+    int ans;
+    int min_diff = target - nums[0];
+    if (min_diff < 0)
+    {
+        min_diff *= -1;
+    }
+
+    std::sort(nums.begin(), nums.end());
+    for (int i = 0; i < length - 2; i++)
+    {
+        if (i > 0 && nums[i] == nums[i - 1])
+        {
+            continue;
+        }
+        int j = length - 1;
+        int n = i + 1;
+        while (n < j)
+        {
+            int temp_ans = nums[i] + nums[j] + nums[n];
+            int temp_min = temp_ans - target;
+            if (temp_min == 0)
+            {
+                return ans;
+            }
+            else if(temp_min < 0)
+            {
+                temp_min *= -1;
+                n++;
+                while (n < j && nums[n] == nums[n - 1]) n++;
+            }
+            else
+            {
+                j--;
+                while (j > n && nums[j] == nums[j + 1]) j--;
+            }
+
+            if (temp_min < min_diff)
+            {
+                min_diff = temp_min;
+                ans = temp_ans;
+            }
+        }
+    }
     
     return ans;
 }
