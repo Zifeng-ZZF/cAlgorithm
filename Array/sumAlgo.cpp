@@ -1,9 +1,11 @@
 #include "sumAlgo.h"
 #include <unordered_map>
 #include <algorithm>
+#include <limits.h>
 
 std::vector<int> twoSum (std::vector<int>& nums, int length, int target)
 {
+    if (nums.empty() || nums.size() < 2) return {};
     std::vector<int> ans;
     std::unordered_map<int, int> hashMap;
     for (int i = 0; i < length; i++)
@@ -26,18 +28,12 @@ Find all the combinations of three numbers such that their sum is zero
 */
 std::vector<std::vector<int>> threeSum (std::vector<int>& nums, int length)
 {
+    if (nums.empty() || nums.size() < 3) return {};
     std::vector<std::vector<int>> ans;
-    if (length <= 2)
-    {
-        return ans;
-    }
     std::sort(nums.begin(), nums.end());  
     for (int i = 0; i < length - 2; i++)
     {
-        if (i > 0 && nums[i] == nums[i - 1])
-        {
-            continue;
-        }
+        if (i > 0 && nums[i] == nums[i - 1]) continue;
         int j = length - 1;
         for (int n = i + 1; n < j;) // not "n < length - 1", j will be changed internally
         {
@@ -53,13 +49,9 @@ std::vector<std::vector<int>> threeSum (std::vector<int>& nums, int length)
                 while (nums[j] == nums[j + 1] && n < j) j--; // skip same larger element
             }
             else if (sum < 0)
-            {
                 n++;
-            }
             else
-            {
                 j--;
-            }
         }
     }
     return ans;
@@ -71,24 +63,16 @@ their sum is closest to the target number. Return the sum of these three numbers
 */
 int threeSumCloset (std::vector<int>& nums, int length, int target)
 {
-    if (length <= 2)
-    {
-        return 0;
-    }
-    int ans;
-    int min_diff = target - nums[0];
-    if (min_diff < 0)
-    {
-        min_diff *= -1;
-    }
+    if (nums.empty() || nums.size() < 3) return 0;
 
+    int ans;
+    int min_diff = INT_MAX;
+    if (min_diff < 0) min_diff *= -1;
     std::sort(nums.begin(), nums.end());
+
     for (int i = 0; i < length - 2; i++)
     {
-        if (i > 0 && nums[i] == nums[i - 1])
-        {
-            continue;
-        }
+        if (i > 0 && nums[i] == nums[i - 1]) continue;
         int j = length - 1;
         int n = i + 1;
         while (n < j)
@@ -97,7 +81,7 @@ int threeSumCloset (std::vector<int>& nums, int length, int target)
             int temp_min = temp_ans - target;
             if (temp_min == 0)
             {
-                return ans;
+                return temp_ans;
             }
             else if(temp_min < 0)
             {
@@ -118,6 +102,21 @@ int threeSumCloset (std::vector<int>& nums, int length, int target)
             }
         }
     }
-    
+    return ans;
+}
+
+/*
+Given an array nums of n integers and an integer target, are there
+elements a, b, c, and d in nums such that a + b + c + d = target? 
+Find all unique quadruplets in the array which gives the sum of target.
+*/
+std::vector<std::vector<int>> fourSum(std::vector<int>& nums, int target)
+{
+    if (nums.empty() || nums.size() < 4) return {};
+    int length = nums.size();
+    std::vector<std::vector<int>> ans;
+
+
+
     return ans;
 }
