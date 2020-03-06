@@ -10,7 +10,7 @@
 
 void bitMapSort(std::vector<int>& nums, int range)
 {
-    std::vector<bool> bitmap(range);
+    std::vector<bool> bitmap;
     for (int i = 0; i < nums.size(); i ++)
     {
         bitmap[nums[i]] = true;

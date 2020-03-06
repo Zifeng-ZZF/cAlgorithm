@@ -1,12 +1,5 @@
 #include <iostream>
-
-
-
-struct Node
-{
-    int data;
-    struct Node *next;
-};
+#include "node.h"
 
 void displayList(struct Node *node)
 {
@@ -37,7 +30,6 @@ void insertAfter(struct Node *prev_node, int node_data)
         std::cout << "the given previous node is required,cannot be NULL";
         return;
     }
-
     struct Node *newNode = new Node;
     newNode->data = node_data;
     newNode->next = prev_node->next;
@@ -75,9 +67,10 @@ struct Node* reverse(struct Node* headPtr)
     {
         return headPtr;
     }
-    struct Node* newHead = reverse(headPtr->next);
+    struct Node* newHead = reverse(headPtr->next); 
     headPtr->next->next = headPtr;
     headPtr->next = NULL;
+    // Once new header was found, it will be returned to the previous case until reach the first
     return newHead;
 }
 
@@ -87,26 +80,50 @@ struct Node* reverse2(struct Node *headPtr)
     {
         return headPtr;
     }
-    //Two pointers
-    struct Node* previ = NULL;
-    struct Node* temp = headPtr;
+    //Two pointers, one save the previous, one modified current head
+    struct Node* previ = NULL; // previous of the first one is null
+    struct Node* temp = headPtr; // align head and temp
     while (headPtr != NULL)
     {
-        headPtr = headPtr->next;
-        temp->next = previ;
-        previ = temp;
-        temp = headPtr;
+        headPtr = headPtr->next; // move head forward
+        temp->next = previ; // head is safe, temp turns next to previous
+        previ = temp; // previous is safe, move previ forward
+        temp = headPtr; // align temp and head (or locate head)
     }
     return previ;   
 }
 
-/*
-
-*/
-struct Node* sort(struct Node *headPrt)
+// remove all val from a linked list
+struct Node* removeElements(struct Node *head, int val)
 {
-
-    return NULL;
+    if (head == NULL)
+    {
+            return head;
+    }
+    struct Node* curr = head;
+    struct Node* prev = NULL;
+    while (curr != NULL)
+    {
+        if (curr->data == val)
+        {
+            if (prev == NULL)
+            {
+                curr = curr->next;
+                head = curr;
+            }
+            else
+            {
+                prev->next = curr->next;
+                curr = curr->next;
+            }
+        }
+        else
+        {
+            prev = curr;
+            curr = curr->next;  
+        }
+    }
+    return head;
 }
 
 int main()
@@ -117,13 +134,18 @@ int main()
     push(&head, 30);
     push(&head, 40);
 
-    displayList(head);
+    // displayList(head);
 
-    head = reverse(head);
+    // head = reverse(head);
 
-    displayList(head);
+    // displayList(head);
 
-    head = reverse2(head);
+    // head = reverse2(head);
 
-    displayList(head);
+    // displayList(head);
+
+    struct Node* temp = head;
+    std::cout << temp->data << std::endl;
+    head = head->next;
+    std::cout << temp->data << std::endl;
 }
