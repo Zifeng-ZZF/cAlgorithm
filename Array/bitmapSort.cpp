@@ -50,9 +50,11 @@ void bitMapSort3(std::vector<int>& nums, int range)
     std::vector<int> bitmap;
     for (int i = 0; i < nums.size(); i++)
     {
+        // put the value from nums into bitmap with the right order
+        // bitmap[nums[i] / RADIX] : determines which chunk of bit is being accessed
+        // (nums[i] % RADIX) : determines the distance to move the '1' within the range of a chunk
         bitmap[nums[i] / RADIX] = bitmap[nums[i] / RADIX] | 1 << (nums[i] % RADIX);
     }
-
     int k = 0;
     for (int i = 0; i < range; i++)
     {
