@@ -27,7 +27,7 @@ int fib2(int n, int& prev)
     prev = fib2(n - 1, prevPrev);
     return prevPrev + prev;
 }
-// 2.2 memorization, 用数组记录 n > 1的项， 同样是O(n)
+// 2.2 memoization, 用数组记录 n > 1的项， 同样是O(n)
 int fib22(int n, int mem[])
 {
     if (n == 0)
@@ -53,6 +53,21 @@ int fib3(int n)
     return ans;
 }
 
+// 3.1 Dynamic programming & memoization
+int fib31(int n)
+{
+    int dp[n];
+    dp[0] = 0;
+    dp[1] = 1;
+    int k = 2;
+    while (k <= n)
+    {
+        dp[k] = dp[k - 1] + dp[k - 2];
+        k++;
+    }
+    return dp[n];
+}
+
 int main()
 {
     int const input = 7;
@@ -62,7 +77,8 @@ int main()
     // output = fib2(input, prev);
     // output = fib3(input);
     int mem[input + 1];
-    output = fib22(input, mem);
+    // output = fib22(input, mem);
+    output = fib31(7);
     std::cout << "The " << input << "th number of Fibonacci is " << output << std::endl;
     std::cout << "The prev is " << prev << std::endl;
     return 0;
