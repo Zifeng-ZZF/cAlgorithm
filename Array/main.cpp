@@ -11,16 +11,19 @@ int main()
     std::vector<int> output;
     std::vector<std::vector<int>> threeSumOutput;
     int threeSumClosetOutput;
-    int target = 0;
+    int target = 17;
 
     // output = twoSum(input, input.size(), target);
     // threeSumOutput = threeSum(input, input.size());
     // threeSumClosetOutput = threeSumCloset(input, input.size(), 20);
 
-    // for(int i = 0; i < output.size(); i++)
-    // {
-    //     std::cout << output[i] << std::endl;
-    // }
+    // output = towSumSortingBinary(input, input.size(), target);
+    output = twoSumSortingWalkingInwards(input, input.size(), target);
+
+    for(int i = 0; i < output.size(); ++i)
+    {
+        std::cout << output[i] << std::endl;
+    }
 
     // for (int i = 0; i < threeSumOutput.size(); i++)
     // {
@@ -33,16 +36,17 @@ int main()
 
     // std::cout << "closet three sum to 20: " << threeSumClosetOutput << std::endl;
 
-    for (int i = 0; i < input.size(); i++)
-    {
-        std::cout << input[i] << " ";
-    }
-    std::cout << std::endl;
-    // bitMapSort(input, 11);
+    // for (int i = 0; i < input.size(); i++)
+    // {
+    //     std::cout << input[i] << " ";
+    // }
+    // std::cout << std::endl;
+    // // bitMapSort(input, 11);
+    // // bitMapSort2(input, 11);
     // bitMapSort2(input, 11);
-    bitMapSort2(input, 11);
-    for (int i = 0; i < input.size(); i++)
-    {
-        std::cout << input[i] << " ";
-    }
+    // for (int i = 0; i < input.size(); i++)
+    // {
+    //     std::cout << input[i] << " ";
+    // }
+
 }
