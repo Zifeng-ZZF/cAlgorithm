@@ -40,10 +40,10 @@ vector<int> intersection_two(vector<int>& nums1, vector<int>& nums2) {
     return ans;
 }
 
-/* sort and binary search */
+/* sort and binary search: sort only the longer array, search match of elements in the shorter from the longer sorted array */
 /* nlogn */
 /* answer to follow up: if the arrays are already sorted */
-int find(vector<int>& nums, int val) {
+int find(vector<int>& nums, int val) { //binaray search return the index of the target
     int start = 0;
     int end = nums.size() - 1;
     while (start <= end) { //remember to add '='
@@ -70,7 +70,7 @@ vector<int> intersection_three(vector<int>& nums1, vector<int>& nums2) {
     for (int i = 0; i < size; ++i) {
         int res = find(more, few[i]);
         if (res >= 0) {
-            more.erase(more.begin() + res); // has to remove
+            more.erase(more.begin() + res); // has to remove, begin() iterator plus the index
             ans.push_back(few[i]);
         }
     }
@@ -82,7 +82,7 @@ vector<int> intersection_three(vector<int>& nums1, vector<int>& nums2) {
 vector<int> intersection_four(vector<int>& nums1, vector<int>& nums2) {
     sort(nums1.begin(), nums1.end());
     sort(nums2.begin(), nums2.end());
-    int count1 = 0, count2 = 0;
+    int count1 = 0, count2 = 0; // respectively points to two array's start
     int size1 = nums1.size(), size2 = nums2.size();
     vector<int> ans;
     while (count1 < size1 || count2 < size2) {

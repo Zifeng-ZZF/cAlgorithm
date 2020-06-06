@@ -61,7 +61,7 @@ std::vector<int> towSumSortingBinary (std::vector<int> &nums, int length, int ta
         int index = biSearch(nums, 0, length, complement);
         if (index >= 0)
         {
-            if (index != i
+            if (index != i //cannot be the same element
                 || (i > 0 && nums[i-1] == nums[i])
                 || (i < length-1 && nums[i+1] == nums[i]))
             {
