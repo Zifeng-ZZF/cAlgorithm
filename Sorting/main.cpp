@@ -1,4 +1,7 @@
 #include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
 
 void bubbleSort(int arr[], int length)
 {
@@ -68,6 +71,46 @@ void quickSort(int arr[], int low, int high)
     quickSort(arr, low, i - 1);
     quickSort(arr, i + 1, high);
 }
+
+/* merge sort */
+void merge(vector<int>& nums, int l, int m, int r) {
+    vector<int> temp(r - l + 1);
+    int i = l, j = m + 1; //start of two sorted part
+    while (i <= m && j <= r) {
+        if (nums[i] < nums[j]) {
+            temp.push_back(nums[i]);
+            ++i;
+        }
+        else {
+            temp.push_back(nums[j]);
+            ++j;
+        }
+    }
+    while (i <= m) {
+        temp.push_back(nums[i]);
+        ++i
+    }
+    while (j <= r) {
+        temp.push_back(nums[j]);
+        ++j;
+    }
+    for (int k = l; k <= r; ++k) {
+        nums[k] = temp[k - l];
+    }
+}
+void helper(vector<int>& nums, int l, int r) {
+    if (l < r) {
+        int mid = l + (r - l) / 2;
+        helper(nums, l, mid); //left-included
+        helper(nums, mid + 1, r);
+        merge(nums, l, mid, r);
+    }
+}
+void mergeSort(vector<int>& nums) {
+    helper(nums, 0, nums.size() - 1); //left-included
+}
+
+
 
 int main ()
 {

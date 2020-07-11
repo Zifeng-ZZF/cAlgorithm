@@ -38,7 +38,7 @@ int binHelper(vector<int>& dp, int left, int right, int target) {
     while (left <= right) {
         int mid = left + (right - left) / 2;
         if (target <= dp[mid]) {
-            index = mid; //since we either replace the last one or append a new on at the end, we need to retain the right limit before exclude it
+            index = mid; //返回较大的index
             right = mid - 1;
         }
         else {
@@ -70,7 +70,7 @@ int myLIS_two(vector<int>& nums) {
 int myLIS_three(vector<int>& nums) {
     vector<int> dp(nums.size(), INT_MAX);
     for (auto& num : nums) {
-        auto it = lower_bound(dp.begin(), dp.end(), num);
+        auto it = lower_bound(dp.begin(), dp.end(), num); //O(logN)e
         if (it != dp.end()) {
             *it = num;
         }
