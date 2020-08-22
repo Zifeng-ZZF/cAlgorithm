@@ -14,13 +14,18 @@
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <deque>
+
 using namespace std;
+
 struct TreeNode {
     int val;
     TreeNode* left;
     TreeNode* right;
 };
  
+
+ #pragma region Inorder
 /*
     print node with different order in DFS
 */
@@ -53,16 +58,18 @@ void printInorderWithStack(TreeNode* root) {
 /* inorder with Morris method, without stack & recursion */
 /* if has no left nodes, print it. and move right-wards
     if has left nodes, move current to the rightest of its left subtress.
-        then make left as new current
-*/
+        then make left as new current */
 /* 本质是移动 */
-void printInorderWithMorris(TreeNode* root) {
+vector<int> storeInorderWithMorris(TreeNode* root) {
     TreeNode* curr = root;
+    vector<int> ans;
     while (curr != NULL) {
+        /* reach the leftmost node and put it in answer; then move the cursor to the right*/
         if (curr->left == NULL) {
-            cout << curr->val;
+            ans.push_back(curr->val);
             curr = curr->right;
         }
+        /* has left node: then connect the left node's right tree to the head of its father's right tree */
         else {
             TreeNode* rightmost = curr->left;
             TreeNode* temp = curr->left;
@@ -74,9 +81,12 @@ void printInorderWithMorris(TreeNode* root) {
             curr = temp;
         }
     }
+    return ans;
 }
+#pragma endregion
 
 
+#pragma region Pre-Order
 /* preorder root-left-right */
 /* preorder traversal with recurssion */
 void printPreorder(TreeNode* root) {
@@ -137,10 +147,12 @@ void printPreorderWithMorris(TreeNode* root) {
         }
     }
 }
+#pragma endregion
 
 
-/* hard question : postorder: left-right-root */
-/* recurssion method */
+#pragma region Post-Oreder
+/* Q: hard question : postorder: left-right-root */
+/* 1: recurssion method */
 void printPostorder(TreeNode* root) {
     if (root == NULL) {
         return;
@@ -149,7 +161,7 @@ void printPostorder(TreeNode* root) {
     printPostorder(root->right);
     cout << root->val << " ";
 }
-/* iteration method with stack */
+/* 2: iteration method with stack */
 void printPostorderWithStack(TreeNode* root) {
     TreeNode* curr = root;
     stack<TreeNode*> st;
@@ -174,7 +186,7 @@ void printPostorderWithStack(TreeNode* root) {
         }
     }
 }
-/* iteration method wiht stack, reverse - preorder method, not visit postorder */
+/* 3: iteration method wiht stack, reverse - preorder method, not visit postorder */
 /* root - right - left and then reverse */
 vector<int> printPostorderStackReverse(TreeNode* root) {
     if (root == NULL) {
@@ -197,11 +209,11 @@ vector<int> printPostorderStackReverse(TreeNode* root) {
     }
     return res;
 }
+#pragma endregion
 
 
-/*
-    print node with BFS(level order tree traversal)
-*/
+#pragma region Level-Order
+/* Q: print node with BFS(level order tree traversal) */
 void printBFS(TreeNode* root) {
     if (root == NULL) {
         cout << "NULL!" << endl;
@@ -217,18 +229,22 @@ void printBFS(TreeNode* root) {
         qu.push(node->right);
     }
 }
-/* store each levels respectively */
-/* iteration solution with Queue */
+
+/* Q: store each levels respectively */
+/* 1: iteration solution with Queue */
 vector<vector<int>> storeLevelOrderTraversal(TreeNode* root) {
     if (root == NULL) return {};
     vector<vector<int>> ans;
-    int level = 0;
     queue<TreeNode*> qu;
-    qu.push(root);
+    qu.push(root); //make sure the top level is added beforehead 
     TreeNode* curr = NULL;
+    int level = 0;
     while (!qu.empty()) {
-        ans.push_back(vector<int>());
+        /* add a level to the answer */
+        ans.push_back(vector<int>()); 
+        /* n is the length of the current level */
         int n = qu.size();
+        /* iterate through current level and pop current-level elements; And push next level's elements */
         for (int i = 0; i < n; ++i) {
             curr = qu.front();
             qu.pop();
@@ -240,7 +256,17 @@ vector<vector<int>> storeLevelOrderTraversal(TreeNode* root) {
     }
     return ans;
 }
-/* recursion solution: actually DFS using mark of current level */
+
+/* 2: recursion solution: actually DFS using mark of current level */
+/* prototype */
+void helper(TreeNode *, int, vector<vector<int>> &);
+/* entry */
+vector<vector<int>> storeLevelOrderTraversal(TreeNode* root) {
+    vector<vector<int>> ans;
+    helper(root, 0, ans);
+    return ans;
+}
+/* definition */
 void helper(TreeNode* root, int level, vector<vector<int>>& ans) {
     if (ans.size() == level) {
         ans.push_back(vector<int>());
@@ -251,16 +277,111 @@ void helper(TreeNode* root, int level, vector<vector<int>>& ans) {
     if (root->right != NULL)
         helper(root->right, level + 1, ans);      
 }
-vector<vector<int>> storeLevelOrderTraversal(TreeNode* root) {
+#pragma endregion
+
+
+#pragma region ZigZag-Level-Order
+/* Q: Binary Tree ZigZag Level Traversal */
+/* 1: DFS recursion */
+void helper(vector<vector<int>>&, int, TreeNode*);
+vector<vector<int>> zigZagDFSwithMarking(TreeNode * root) {
     vector<vector<int>> ans;
-    helper(root, 0, ans);
+    helper(ans, 0, root);
+    return ans;
+}
+void helper(vector<vector<int>> & ans, int level, TreeNode * root) {
+    if (root == nullptr) return;
+    if (ans.size() == level) 
+        ans.push_back(vector<int>());
+    if (level % 2 == 0) 
+        // insert from left to right at the end
+        ans[level].push_back(root->val);
+    else {
+        // insert from left to right at the front
+        auto it = ans[level].begin();
+        ans[level].insert(it, root->val);
+    }
+    // iterate from left to right
+    helper(ans, level + 1, root->left);
+    helper(ans, level + 1, root->right);
+}
+
+/* 2: iteratore with two Stacks */
+vector<vector<int>> zigZagLevelTraversal(TreeNode * root) {
+    if (root == nullptr) return {};
+    vector<vector<int>> ans;
+    stack<TreeNode*> oddst;
+    stack<TreeNode*> evenst;
+    evenst.push(root);
+
+    int level = 0;
+    TreeNode * temp;
+    while (!oddst.empty() || !evenst.empty()) {
+        int n = evenst.empty() ? oddst.size() : evenst.size();
+        ans.push_back(vector<int>(n));
+        if (level % 2 != 0) {
+            for (int i = 0; i < n; ++i) {
+                //current is odd
+                temp = oddst.top();
+                oddst.pop();
+                ans[level][i] = temp->val;
+                if (temp->right != nullptr) evenst.push(temp->right);
+                if (temp->left != nullptr) evenst.push(temp->left);
+            }
+        }
+        else {
+            for (int i = 0; i < n; ++i) {
+                //current is even
+                temp = evenst.top();
+                evenst.pop();
+                ans[level][i] = temp->val;
+                if (temp->left != nullptr) oddst.push(temp->left);
+                if (temp->right != nullptr) oddst.push(temp->right);
+            }
+        }
+        ++level;
+    }
     return ans;
 }
 
+/* 3: double iteration with deque */
+vector<vector<int>> zigZagDeque(TreeNode * root) {
+    if (root == nullptr) return {};    
+    vector<vector<int>> ans;
+    deque<TreeNode*> dq;
+    dq.push_back(root);
+    
+    int level = 0;
+    TreeNode * temp;
+    while (!dq.empty()) {
+        int n = dq.size();
+        ans.push_back(vector<int>(n));
+        for (int i = 0; i < n; ++i) {
+            if (level % 2 == 0) {
+                temp = dq.front();
+                dq.pop_front();
+                ans[level][i] = temp->val;
+                if (temp->left != nullptr) dq.push_back(temp->left);
+                if (temp->right != nullptr) dq.push_back(temp->right);
+            }
+            else {
+                temp = dq.back();
+                dq.pop_back();
+                ans[level][i] = temp->val;
+                if (temp->right != nullptr) dq.push_front(temp->right);
+                if (temp->left != nullptr) dq.push_front(temp->left);
+            }
+        }
+        ++level;
+    }
+    return ans;
+}
 
-/*
-    Find the maximum depth of a given tree 
-*/
+#pragma endregion
+
+
+#pragma region Max-Depth
+/* Q: Find the maximum depth of a given tree */
 /* recursion: DFS */
 int findMaxDepth_one(TreeNode* root) {
     if (root == NULL) {
@@ -268,7 +389,6 @@ int findMaxDepth_one(TreeNode* root) {
     }
     return max(1 + findMaxDepth_one(root->left), 1 + findMaxDepth_one(root->right));
 }
-
 /* iteration: make use of stack(for DFS), record every nodes height */
 int findMaxDepth_two(TreeNode* root) {
     if (root == NULL) {
@@ -292,3 +412,4 @@ int findMaxDepth_two(TreeNode* root) {
     }
     return maxD;
 }
+#pragma endregion

@@ -29,7 +29,7 @@ vector<string> constructParenthese(int n) {
 bool validate(string str) {
     unordered_map<char, char> umap = {
         {')', '('},
-        {'[', ']'},
+        {']', '['},
         {'}', '{'}
     };
     stack<char> st;

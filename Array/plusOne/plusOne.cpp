@@ -13,7 +13,7 @@ vector<int> plusOne(vector<int> nums) {
         nums[i] += carryBit;
         carryBit = nums[i] / 10; //important step: record the highest-position digit; record if there is carry bit
         nums[i] %= 10;
-        if (!carryBit) {
+        if (!carryBit) { // not carry, means no change to higer bit, break the loop
             break;
         }
     }
@@ -24,7 +24,7 @@ vector<int> plusOne(vector<int> nums) {
 }
 
 /* fastest solution */
-/* if 9 equal to 0, if not ++ and break; check the final digit, if idx = -1, then the last digit must not be broke */
+/* if current bit is 9, make equal to 0, if not ++ and break; check the final digit, if idx = -1, then the last digit must not be broke */
 vector<int> plusOne_two(vector<int> nums) {
     int idx;
     for (idx = nums.size() - 1; idx >= 0; --idx) {
@@ -36,7 +36,7 @@ vector<int> plusOne_two(vector<int> nums) {
             break;
         }
     }
-    if (idx < 0) { // has carry = 1
+    if (idx < 0) { // if has carry, idx must be lower than 0
         nums.insert(nums.begin(), 1);
     }
     return nums;
